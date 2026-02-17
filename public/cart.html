@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Your Cart</title>
+</head>
+<body>
+  <h1>🛒 Your Cart</h1>
+  <div id="cart"></div>
+  <h2 id="total"></h2>
+  <button onclick="placeOrder()">Place Order</button>
+
+<script>
+const token = localStorage.getItem("token");
+
+async function loadCart() {
+  const res = await fetch("/api/cart", {
+    headers: { Authorization: "Bearer " + token }
+  });
+
+  const data = await res.json();
+  const container = document.getElementById("cart");
+  let total = 0;
+
+  if (data.length === 0) {
+    container.innerHTML = "Your cart is empty";
+    return;
+  }
+
+  data.forEach(item => {
+    total += item.price * item.quantity;
+    container.innerHTML += `
+      <div>
+        <h3>${item.name}</h3>
+        <p>₹ ${item.price} x ${item.quantity}</p>
+      </div>
+      <hr/>
+    `;
+  });
+
+  document.getElementById("total").innerText = "Total: ₹ " + total;
+}
+
+async function placeOrder() {
+  const res = await fetch("/api/place-order", {
+    method: "POST",
+    headers: { Authorization: "Bearer " + token }
+  });
+
+  const data = await res.json();
+  alert(data.message);
+
+  if (res.ok) {
+    window.location.href = "orders.html";
+  }
+}
+
+loadCart();
+</script>
+</body>
+</html>

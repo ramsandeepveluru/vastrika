@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Orders</title>
+</head>
+<body>
+  <h1>📦 My Orders</h1>
+  <div id="orders"></div>
+
+<script>
+const token = localStorage.getItem("token");
+
+async function loadOrders() {
+  const res = await fetch("/api/my-orders", {
+    headers: { Authorization: "Bearer " + token }
+  });
+
+  const orders = await res.json();
+  const container = document.getElementById("orders");
+
+  if (orders.length === 0) {
+    container.innerHTML = "No orders placed yet.";
+    return;
+  }
+
+  orders.forEach(order => {
+    container.innerHTML += `
+      <div>
+        <h2>Order #${order.id}</h2>
+        <p>Total: ₹ ${order.total_amount}</p>
+        <p>Status: ${order.status}</p>
+      </div>
+    `;
+
+    order.items.forEach(item => {
+      container.innerHTML += `
+        <div style="margin-left:20px;">
+          <p>${item.name} - ₹ ${item.price} x ${item.quantity}</p>
+        </div>
+      `;
+    });
+
+    container.innerHTML += "<hr/>";
+  });
+}
+
+loadOrders();
+</script>
+</body>
+</html>
