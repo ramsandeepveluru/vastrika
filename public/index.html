@@ -2,6 +2,12 @@
 <html>
 <head>
   <title>Vastrika – Online Store</title>
+  <script>
+if (!localStorage.getItem("token")) {
+  window.location.href = "/login.html";
+}
+</script>
+
 
   <style>
     body {
