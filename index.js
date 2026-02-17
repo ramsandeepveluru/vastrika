@@ -24,12 +24,12 @@ if (process.env.DATABASE_URL) {
   db = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "YOUR_LOCAL_PASSWORD",
+    password: "Google@171",
     database: "vastrika_store"
   });
 }
 
-const PORT = process.env.PORT || 4000;
+
 
 /* ==============================
    JWT MIDDLEWARE
