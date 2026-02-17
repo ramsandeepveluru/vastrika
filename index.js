@@ -16,23 +16,39 @@ app.use(express.static("public"));
    DATABASE CONNECTION
 ============================== */
 
-const mysql = require("mysql2");
 
-const db = mysql.createConnection({
-  host: process.env.MYSQLHOST,
-  user: process.env.MYSQLUSER,
-  password: process.env.MYSQLPASSWORD,
-  database: process.env.MYSQLDATABASE,
-  port: process.env.MYSQLPORT,
-});
+
+
+
+let db;
+
+if (process.env.MYSQLHOST) {
+  // Railway
+  db = mysql.createConnection({
+    host: process.env.MYSQLHOST,
+    user: process.env.MYSQLUSER,
+    password: process.env.MYSQLPASSWORD,
+    database: process.env.MYSQLDATABASE,
+    port: process.env.MYSQLPORT,
+  });
+} else {
+  // Local
+  db = mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    password: "Google@171",
+    database: "vastrika_store",
+  });
+}
 
 db.connect((err) => {
   if (err) {
     console.error("❌ MySQL Connection Failed:", err);
   } else {
-    console.log("✅ Connected to Railway MySQL");
+    console.log("✅ Connected to Database");
   }
 });
+
 
 
 
